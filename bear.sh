@@ -36,6 +36,15 @@ function setup_dotfiles() {
     echo "Dotfiles applied"
 }
 
+function setup_fish() {
+    echo "Setting fish as defaul shell"
+    cat /etc/shells | grep /usr/local/bin/fish > /dev/null
+    if [[ $? -ne 0 ]]; then
+        sudo echo "/usr/local/bin/fish" >> /etc/shells
+    fi
+    chsh -s /usr/local/bin/fish
+}
+
 function darwin_install() {
     echo "Installing Homebrew"
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" > /dev/null
@@ -56,6 +65,7 @@ main() {
         elif [[ "$platform" == "linux" ]]; then
             linux_install
         fi
+        setup_fish
     fi
 }
 
